@@ -1,0 +1,147 @@
+drop table if exists ServiceType;
+drop table if exists Appointment;
+drop table if exists Pet;
+drop table if exists Customer;
+drop table if exists Services;
+drop table if exists Groomer;
+drop table if exists Timeslot;
+
+
+# Create tables 
+
+create table Timeslot
+        (SlotId MEDIUMINT UNSIGNED NOT NULL AUTO_INCREMENT,
+         slot_time DATETIME,
+         primary key (SlotId));
+
+create table Groomer
+	(GID MEDIUMINT UNSIGNED NOT NULL AUTO_INCREMENT,
+	 name char(40),
+	 email char(25),
+         address char(50),
+         primary key(GID));
+
+create table Services
+	(SID MEDIUMINT UNSIGNED NOT NULL AUTO_INCREMENT,
+	 price decimal(5,2),
+	 description char(25),
+         GID MEDIUMINT UNSIGNED NOT NULL,
+         primary key(SID),
+         foreign key (GID) references Groomer(GID)
+         on delete no action on update no action ) ENGINE = INNODB;
+
+
+create table Customer
+	(CustId MEDIUMINT UNSIGNED NOT NULL AUTO_INCREMENT,
+	 Custname char(40),
+	 email char(25),
+         address char(50),
+         phone char(10),
+         primary key(CustId));
+
+create table Pet
+      (PetId MEDIUMINT UNSIGNED NOT NULL AUTO_INCREMENT,
+       petBreed char(20),
+       petGender char(1),
+       CustId MEDIUMINT UNSIGNED NOT NULL,
+       petName char(25),
+       primary key (PetId),
+       foreign key (CustId) references Customer(CustId)
+       on delete cascade)ENGINE = InnoDB;
+
+
+
+create table Appointment
+	(AppId MEDIUMINT UNSIGNED NOT NULL AUTO_INCREMENT,
+	 appDate DATETIME,
+         start_time TIME,
+         primary key(AppId),
+         PetId MEDIUMINT UNSIGNED NOT NULL,
+	 Sid MEDIUMINT UNSIGNED NOT NULL,
+         foreign key(PetId) references Pet(PetId),
+	 foreign key(Sid) references Services(Sid));
+
+
+
+# Insert data into tables 
+
+#Groomer table
+
+INSERT INTO Groomer (GID, name, email, address)
+ VALUES(101, 'John Doe', 'johndoe@groomer.com', 'dekalb');
+
+INSERT INTO Groomer(GID,name, email, address)
+ values(102, 'Swati Botuwar','z1828087@student.cs.niu.edu','dekalb');
+
+
+#Services
+
+insert into Services(SID, price,description, GID)
+values(1, 85.00, 'Brushing',101);
+
+insert into Services(SID, price, description, GID)
+values(2, 110.00,'Sampooing', 101);
+
+insert into Services(SID, price, description, GID)
+values(3, 102.65,'Trimming', 101);
+
+
+#Customer
+
+insert into Customer(custId, Custname, email, address,phone)
+values(100, 'Mary Brown','mary.brown@gmail.com', 'dekalb','1234567890');
+
+insert into Customer(custId, Custname, email, address, phone)
+values(101, 'Peletier Sophia','peletier.sophia@gmail.com', 'dekalb','2345160987');
+
+
+#PET table
+
+insert into Pet(PetId, petBreed, petGender, CustId,petname)
+values(1, 'Siberian Husky','M',100,'Sky');
+
+
+insert into Pet(PetId, petBreed, petGender, CustId,petname)
+values(2, 'Bulldog','F',101,'Lola');
+
+
+
+#Appointment
+
+insert into Appointment(AppId,appDate, start_time,PetId, Sid)
+values(1000,'2017-03-30 10:00:00','10:00:00',1, 1);
+
+insert into Appointment(AppId,appDate, start_time,PetId, Sid)
+values(1001, '2017-03-30 12:00:00', '12:00:00',2, 1);
+
+
+insert into Appointment(AppId,appDate, start_time, PetId, Sid)
+values(1002, '2017-03-29 08:00:00', '08:00:00', 1, 3);
+
+
+
+
+#ServiceType
+
+insert into ServiceType(serviceType, SID, AppId)
+values('Brushing',1,1000);
+
+insert into ServiceType(serviceType, SID, AppId)
+values('Trimming',3,1001);
+
+insert into ServiceType(serviceType, SID, AppId)
+values('Sampooing',2,1001);
+
+
+## Timeslot
+
+insert into Timeslot (slot_time) VALUES ('2017-05-30 10:00:00');   
+
+insert into Timeslot (slot_time) VALUES ('2017-05-30 10:00:00');  
+
+insert into Timeslot (slot_time) VALUES ('2017-05-30 14:00:00'); 
+
+insert into Timeslot (slot_time) VALUES ('2017-06-01 10:00:00'); 
+
+insert into Timeslot (slot_time) VALUES ('2017-06-01 12:00:00'); 
+
